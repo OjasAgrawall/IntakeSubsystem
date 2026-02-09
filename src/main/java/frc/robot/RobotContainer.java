@@ -26,21 +26,21 @@ public class RobotContainer {
             .onTrue(
                 IntakeSubsytem.setIntakeCommand(Constants.intakePosition))
             .whileTrue(IntakeSubsytem.spinIntakeCommand(-1))
-            .onFalse(IntakeSubsytem.stopIntake());
+            .onFalse(IntakeSubsytem.spinIntakeCommand(0));
 
         m_driverController
             .a()
             .onTrue(
                 IntakeSubsytem.setIntakeCommand(Constants.intakePosition))
             .whileTrue(IntakeSubsytem.spinIntakeCommand(1))
-            .onFalse(IntakeSubsytem.stopIntake());
+            .onFalse(IntakeSubsytem.spinIntakeCommand(0));
 
         m_driverController
             .x()
             .onTrue(
                 Commands.parallel(
                     IntakeSubsytem.setIntakeCommand(Constants.idlePosition),
-                    IntakeSubsytem.stopIntake()
+                    IntakeSubsytem.spinIntakeCommand(0)
                 ));
                 
     }

@@ -4,9 +4,11 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.DutyCycle;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
 import frc.robot.Constants;
@@ -21,8 +23,8 @@ public class IntakeSubsytem extends SubsystemBase {
     private TalonFX deployMotor;
 
     public IntakeSubsytem() {
-        intakeMotor = Constants.intakeMotor;
-        deployMotor = Constants.deployMotor;
+        intakeMotor = Constants.intakeMotorID;
+        deployMotor = Constants.deployMotorID;
     }
 
     public Command setIntakeCommand(double position) {
@@ -37,25 +39,16 @@ public class IntakeSubsytem extends SubsystemBase {
         });
     }
 
-    public Command stopIntake() {
-        return runOnce(() -> {
-            stopIntakeMotor();
-        });
-    }
-
     // this can be used to create the presets
     public void setIntakePosition(double position) {
-        // what is the difference
-        // intakeMotor.setPosition(position);
-        deployMotor.setControl(new PositionDutyCycle(position));
+        PositionDutyCycle request = new PositionDutyCycle(position);
+        deployMotor.setControl(request);
     }
 
     public void spinIntake(double speed) {
-        intakeMotor.set(speed);
-    }
-
-    public void stopIntakeMotor() {
-        intakeMotor.stopMotor();
+        DutyCycleOut request = new DutyCycleOut(speed);
+        request.UpdateFreqHz = Constants.intakeFrequency;
+        intakeMotor.setControl(request);
     }
 
     public boolean exampleCondition() {
