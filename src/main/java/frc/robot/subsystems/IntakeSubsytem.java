@@ -47,7 +47,6 @@ public class IntakeSubsytem extends SubsystemBase {
 
     public void spinIntake(double speed) {
         DutyCycleOut request = new DutyCycleOut(speed);
-        request.UpdateFreqHz = Constants.intakeFrequency;
         intakeMotor.setControl(request);
     }
 

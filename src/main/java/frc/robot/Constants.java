@@ -24,7 +24,4 @@ public final class Constants {
     public static final TalonFX deployMotorID = new TalonFX(1);
     public static final double intakePosition = 10;
     public static final double idlePosition = 0;
-
-    public static final int intakeFrequency = 100;
-
 }
