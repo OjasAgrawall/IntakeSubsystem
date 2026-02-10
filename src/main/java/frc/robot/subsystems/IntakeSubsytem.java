@@ -57,6 +57,7 @@ public class IntakeSubsytem extends SubsystemBase {
         return state;
     }
 
+    //command cause the .ontrue thing wants a command (is this how it should be done, i think its kinda goofy)
     public Command setStateCommand(IntakeState state) {
         return this.runOnce(() -> setState(state));
     }
