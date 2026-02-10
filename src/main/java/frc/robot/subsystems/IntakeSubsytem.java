@@ -28,15 +28,11 @@ public class IntakeSubsytem extends SubsystemBase {
     }
 
     public Command setIntakeCommand(double position) {
-        return runOnce(() -> {
-            setIntakePosition(position);
-        });
+        return runOnce(() -> setIntakePosition(position));
     }
 
     public Command spinIntakeCommand(double speed) {
-        return runOnce(() -> {
-            spinIntake(speed);
-        });
+        return runOnce(() -> spinIntake(speed));
     }
 
     public void setIntakePosition(double position) {
@@ -59,7 +55,7 @@ public class IntakeSubsytem extends SubsystemBase {
 
     //command cause the .ontrue thing wants a command (is this how it should be done, i think its kinda goofy)
     public Command setStateCommand(IntakeState state) {
-        return this.runOnce(() -> setState(state));
+        return runOnce(() -> setState(state));
     }
 
     public void handleStates(){
