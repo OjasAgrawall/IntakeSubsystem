@@ -5,7 +5,7 @@
 package frc.robot;
 
 import frc.robot.subsystems.IntakeSubsytem;
-import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.subsystems.states.IntakeState;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 public class RobotContainer {
@@ -23,26 +23,13 @@ public class RobotContainer {
 
         m_driverController
             .b()
-            .onTrue(
-                IntakeSubsytem.setIntakeCommand(Constants.intakePosition))
-            .whileTrue(IntakeSubsytem.spinIntakeCommand(-1))
-            .onFalse(IntakeSubsytem.spinIntakeCommand(0));
+            .onTrue(IntakeSubsytem.setStateCommand(IntakeState.INTAKE))
+            .onFalse(IntakeSubsytem.setStateCommand(IntakeState.IDLE));
 
         m_driverController
             .a()
-            .onTrue(
-                IntakeSubsytem.setIntakeCommand(Constants.intakePosition))
-            .whileTrue(IntakeSubsytem.spinIntakeCommand(1))
-            .onFalse(IntakeSubsytem.spinIntakeCommand(0));
-
-        m_driverController
-            .x()
-            .onTrue(
-                Commands.parallel(
-                    IntakeSubsytem.setIntakeCommand(Constants.idlePosition),
-                    IntakeSubsytem.spinIntakeCommand(0)
-                ));
-                
+            .onTrue(IntakeSubsytem.setStateCommand(IntakeState.OUTTAKE))
+            .onFalse(IntakeSubsytem.setStateCommand(IntakeState.IDLE));
     }
 
     // public Command getAutonomousCommand() {

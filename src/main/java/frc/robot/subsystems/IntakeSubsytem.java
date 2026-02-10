@@ -4,7 +4,6 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.DutyCycle;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -12,6 +11,7 @@ import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
 import frc.robot.Constants;
+import frc.robot.subsystems.states.*;
 
 public class IntakeSubsytem extends SubsystemBase {
     // we have two motors
@@ -22,9 +22,13 @@ public class IntakeSubsytem extends SubsystemBase {
     private TalonFX intakeMotor;
     private TalonFX deployMotor;
 
+    private IntakeState state;
+
     public IntakeSubsytem() {
         intakeMotor = Constants.intakeMotorID;
         deployMotor = Constants.deployMotorID;
+
+        state = IntakeState.IDLE;
     }
 
     public Command setIntakeCommand(double position) {
@@ -39,7 +43,6 @@ public class IntakeSubsytem extends SubsystemBase {
         });
     }
 
-    // this can be used to create the presets
     public void setIntakePosition(double position) {
         PositionDutyCycle request = new PositionDutyCycle(position);
         deployMotor.setControl(request);
@@ -50,12 +53,36 @@ public class IntakeSubsytem extends SubsystemBase {
         intakeMotor.setControl(request);
     }
 
-    public boolean exampleCondition() {
-        return false;
+    public void setState(IntakeState state) {
+        this.state = state;
+    }
+
+    public IntakeState getState() {
+        return state;
+    }
+
+    public Command setStateCommand(IntakeState state) {
+        return this.runOnce(() -> setState(state));
+    }
+
+    public void handleStates(){
+        switch (state) {
+            case IDLE:
+            case INTAKE:
+            case OUTTAKE:
+                setIntakeCommand(state.getIntakePosition());
+                spinIntakeCommand(state.getIntakeRotation());
+                break;
+        
+            default:
+                setIntakeCommand(0);
+                spinIntakeCommand(0);
+        }
     }
 
     @Override
     public void periodic() {
+        handleStates();
     }
 
     @Override
